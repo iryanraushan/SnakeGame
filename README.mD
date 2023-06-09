@@ -2,7 +2,7 @@
 
 Open Terminal and run 
 ```
-https://github.com/RyanRaushan/SnakeGame.git
+git clone https://github.com/RyanRaushan/SnakeGame.git
 ```
 
 Open this project in editor : vscode.
