@@ -32,6 +32,16 @@
     font-family: 'New Tegomin', serif;
 }
 
+#level__box {
+  position: absolute;
+  top: 115px;
+  right: 190px;
+  font-size: 39px;
+  font-weight: bold;
+  font-family: "New Tegomin", serif;
+}
+
+
 #board{
     background: linear-gradient(rgb(170, 236, 170), rgb(236, 236, 167));
     width: 90vmin;
