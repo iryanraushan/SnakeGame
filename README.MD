@@ -1,5 +1,7 @@
 # SNAKE GAME
 
+You  Can play this game : iryanraushan.github.io/SnakeGame/
+
 Open Terminal and run 
 ```
 git clone https://github.com/RyanRaushan/SnakeGame.git
