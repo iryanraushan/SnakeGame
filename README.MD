@@ -1,6 +1,5 @@
 # SNAKE GAME
-
-You  Can play this game : https://iryanraushan.github.io/SnakeGame/
+- Play the game : https://iryanraushan.github.io/SnakeGame/
 
 Open Terminal and run 
 ```
