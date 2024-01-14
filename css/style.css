@@ -1,72 +1,202 @@
-@import url('https://fonts.googleapis.com/css2?family=New+Tegomin&display=swap');
-*{
-    padding: 0;
-    margin: 0;
+@import url("https://fonts.googleapis.com/css2?family=New+Tegomin&display=swap");
+:root {
+  --b: 3px; /* border thickness */
+  --s: 0.45em; /* size of the corner */
+  --color: #2d2727;
+}
+* {
+  padding: 0;
+  margin: 0;
 }
 
-.body{
-    background: url("../img/bg.jpg"); 
-    min-height: 100vh;
-    background-size: 100vw 100vh;
-    background-repeat: no-repeat;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.body {
+  background: url("../img/bg.jpg");
+  min-height: 100vh;
+  background-size: 100vw 100vh;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-#scoreBox{
-    position: absolute;
-    top: 9px;
-    right: 200px;
-    font-size: 39px;
-    font-weight: bold;
-    font-family: 'New Tegomin', serif;
+#overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(54, 53, 53, 0.686);
+  /* semi-transparent black overlay */
+  transition: all 0.6s;
+  z-index: 1;
 }
 
-#hiscoreBox{
-    position: absolute;
-    top: 59px;
-    right: 140px;
-    font-size: 39px;
-    font-weight: bold;
-    font-family: 'New Tegomin', serif;
-}
-
-#level__box {
+#scoreBox {
   position: absolute;
-  top: 115px;
-  right: 190px;
+  top: 9px;
+  right: 200px;
   font-size: 39px;
   font-weight: bold;
   font-family: "New Tegomin", serif;
 }
 
-
-#board{
-    background: linear-gradient(rgb(170, 236, 170), rgb(236, 236, 167));
-    width: 90vmin;
-    height: 92vmin;
-    border: 2px solid black;
-    display: grid;
-    grid-template-rows: repeat(18, 1fr);
-    grid-template-columns: repeat(18, 1fr);
+#hiscoreBox {
+  position: absolute;
+  top: 59px;
+  right: 160px;
+  font-size: 39px;
+  font-weight: bold;
+  font-family: "New Tegomin", serif;
 }
 
-.head{
-    background: linear-gradient(rgb(214, 99, 99), rgb(228, 228, 129));
-    border: 2px solid rgb(34, 4, 34); 
-    transform: scale(1.02);
-    border-radius: 9px;
+#level__box {
+  position: absolute;
+  top: 115px;
+  right: 180px;
+  font-size: 39px;
+  font-weight: bold;
+  font-family: "New Tegomin", serif;
 }
 
-.snake{
-    background-color: purple;
-    border: .25vmin solid white;
-    border-radius: 12px;
+#button {
+  position: absolute;
+  top: 183px;
+  right: 180px;
+  font-size: 40px;
+  font-weight: bold;
+  box-sizing: border-box;
+  font-family: "New Tegomin", serif;
+  padding: calc(0.5em + var(--s)) calc(0.9em + var(--s));
+  color: var(--color);
+  --_p: var(--s);
+  background: conic-gradient(
+      from 90deg at var(--b) var(--b),
+      #0000 90deg,
+      var(--color) 0
+    )
+    var(--_p) var(--_p) / calc(100% - var(--b) - 2 * var(--_p))
+    calc(100% - var(--b) - 2 * var(--_p));
+  transition: 0.3s linear, color 0s, background-color 0.7s;
+  outline: var(--b) solid #0000;
+  outline-offset: 0.45em;
+  font-size: 30px;
+  border: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
 }
 
-.food{
-    background: linear-gradient(red, purple);
-    border: .25vmin solid black;
-    border-radius: 8px;
+#button:hover,
+#button:focus-visible {
+  --_p: 0px;
+  outline-color: var(--color);
+  outline-offset: 0.05em;
+  transition: all 0.6s;
+}
+
+#button:active {
+  background: var(--color);
+  color: #80a203;
+}
+
+#popup {
+  border-radius: 20px;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 38px 85px;
+  background-color: #153e0ad6;
+  color: #e9eb88;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  z-index: 1000;
+}
+
+#gameDetails {
+  margin-top: 5px;
+  font-family: "New Tegomin", serif;
+  font-weight: 600;
+  font-size: 25px;
+  text-align: center;
+}
+
+#popup h2 {
+  font-size: 30px;
+  font-family: "New Tegomin", serif;
+  font-weight: 600;
+  text-align: center;
+}
+
+#restartbutton {
+  margin: 11px 0px 0px 135px;
+  font-size: 20px;
+  align-self: center;
+  background-color: #bdeb07;
+  background-image: none;
+  background-position: 0 90%;
+  background-repeat: repeat no-repeat;
+  background-size: 4px 3px;
+  border-style: solid;
+  border-radius: 20px;
+  border-width: 2px;
+  box-shadow: rgb(22 53 8) 0px 5px 5px 7px;
+  box-sizing: border-box;
+  color: #41403e;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "New Tegomin", serif;
+  font-weight: bold;
+  line-height: 23px;
+  outline: none;
+  padding: 1rem;
+  text-decoration: none;
+  transition: all 235ms ease-in-out;
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+#restartbutton:hover {
+  box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px -5px;
+  transform: translate3d(0, 2px, 0);
+}
+
+#restartbutton:focus {
+  box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 4px -6px;
+}
+
+#board {
+  background: linear-gradient(rgb(170, 236, 170), rgb(236, 236, 167));
+  width: 90vmin;
+  height: 92vmin;
+  border: 2px solid black;
+  display: grid;
+  grid-template-rows: repeat(18, 1fr);
+  grid-template-columns: repeat(18, 1fr);
+}
+
+.head {
+  background: linear-gradient(rgb(214, 99, 99), rgb(228, 228, 129));
+  border: 2px solid rgb(34, 4, 34);
+  transform: scale(1.02);
+  border-radius: 9px;
+}
+
+.snake {
+  background-color: purple;
+  border: 0.25vmin solid white;
+  border-radius: 12px;
+}
+
+.food {
+  background: linear-gradient(red, purple);
+  border: 0.25vmin solid black;
+  border-radius: 8px;
 }

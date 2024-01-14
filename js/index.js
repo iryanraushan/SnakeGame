@@ -4,18 +4,16 @@ const foodSound = new Audio("music/food.mp3");
 const gameOverSound = new Audio("music/gameover.mp3");
 const moveSound = new Audio("music/move.mp3");
 const musicSound = new Audio("music/music.mp3");
-let speed = 3;
+let speed = 4;
 let score = 0;
-let level = 1;
 let lastPaintTime = 0;
 let snakeArr = [{ x: 13, y: 15 }];
 
-food = { x: 6, y: 7 };
+food = { x: 5, y: 5 };
 
 // Game Functions
 function main(ctime) {
   window.requestAnimationFrame(main);
-  // console.log(ctime)
   if ((ctime - lastPaintTime) / 1000 < 1 / speed) {
     return;
   }
@@ -43,16 +41,44 @@ function isCollide(snake) {
   return false;
 }
 
+function popupDesign() {
+  const scoreDisplay = document.getElementById("scoreDisplay");
+  const levelDisplay = document.getElementById("levelDisplay");
+  const speedDisplay = document.getElementById("speedDisplay");
+  const acchive = document.getElementById("acchive");
+  let funMessage = "";
+  if (score < 10) {
+    funMessage = "LOL 😄 You're just getting started!";
+  } else if (score <= 30 && score >= 10) {
+    funMessage = "Not Bad 🤩 Keep it up!";
+  } else if (score >= 31 && score <= 100) {
+    funMessage = "Good job Champ 🎉 You're on fire!";
+  } else if (score >= 100 && score <= 200) {
+    funMessage = "You Are a Legend 🏆 Unleash the champion in you!";
+  } else if (score >= 200) {
+    funMessage = "Our Snake Mania Maestro 🥇 You're a true Snake Whisperer!";
+  }
+  acchive.innerHTML = funMessage;
+  scoreDisplay.innerHTML = "Your score: " + score;
+  levelDisplay.innerHTML = "Level: " + gameLevel;
+  speedDisplay.innerHTML = "Snake speed: " + speed;
+}
+
+function showGameOverPopup() {
+  document.getElementById("overlay").style.display = "block";
+  const popup = document.getElementById("popup");
+  popup.style.display = "block";
+  popupDesign();
+}
+
 function gameEngine() {
   // Part 1: Updating the snake array & Food
   if (isCollide(snakeArr)) {
     gameOverSound.play();
     musicSound.pause();
     inputDir = { x: 0, y: 0 };
-    alert("Game Over. Press any key to play again!");
-    snakeArr = [{ x: 13, y: 15 }];
-    musicSound.play();
-    score = 0;
+    showGameOverPopup();
+    return;
   }
 
   // If you have eaten the food, increment the score and regenerate the food
@@ -60,10 +86,36 @@ function gameEngine() {
     foodSound.play();
     score += 1;
 
-    if (score % 7 == 0) {
-      level = level + 1;
-      level__box.innerHTML = "Level : " + level;
-      speed = speed + 1;
+    if (score >= 1 && score <= 11) {
+      gameLevel = 1;
+      speed = 4;
+      localStorage.setItem("level", JSON.stringify(gameLevel));
+      level__box.innerHTML = "Level : " + gameLevel;
+    } else if (score >= 12 && score <= 34) {
+      gameLevel = 2;
+      speed = 5;
+      localStorage.setItem("level", JSON.stringify(gameLevel));
+      level__box.innerHTML = "Level : " + gameLevel;
+    } else if (score >= 35 && score <= 68) {
+      gameLevel = 3;
+      speed = 6;
+      localStorage.setItem("level", JSON.stringify(gameLevel));
+      level__box.innerHTML = "Level : " + gameLevel;
+    } else if (score >= 69 && score <= 113) {
+      gameLevel = 4;
+      speed = 7;
+      localStorage.setItem("level", JSON.stringify(gameLevel));
+      level__box.innerHTML = "Level : " + gameLevel;
+    } else if (score >= 114 && score <= 158) {
+      gameLevel = 5;
+      speed = 7;
+      localStorage.setItem("level", JSON.stringify(gameLevel));
+      level__box.innerHTML = "Level : " + gameLevel;
+    } else if (score >= 159 && score <= 225) {
+      gameLevel = 5;
+      speed = 8;
+      localStorage.setItem("level", JSON.stringify(gameLevel));
+      level__box.innerHTML = "Level : " + gameLevel;
     }
 
     if (score > hiscoreval) {
@@ -71,6 +123,7 @@ function gameEngine() {
       localStorage.setItem("hiscore", JSON.stringify(hiscoreval));
       hiscoreBox.innerHTML = "HiScore: " + hiscoreval;
     }
+
     scoreBox.innerHTML = "Score: " + score;
     snakeArr.unshift({
       x: snakeArr[0].x + inputDir.x,
@@ -115,46 +168,85 @@ function gameEngine() {
   board.appendChild(foodElement);
 }
 
-// Main logic starts here
-musicSound.play();
-let hiscore = localStorage.getItem("hiscore");
-if (hiscore === null) {
+// Function to reset scores and level
+function resetScoresAndLevel() {
+  speed = 4;
+  gameLevel = 1;
   hiscoreval = 0;
+  score = 0;
+
   localStorage.setItem("hiscore", JSON.stringify(hiscoreval));
-} else {
-  hiscoreval = JSON.parse(hiscore);
-  hiscoreBox.innerHTML = "HiScore: " + hiscore;
+  localStorage.setItem("level", JSON.stringify(gameLevel));
+  hiscoreBox.innerHTML = "HiScore: " + hiscoreval;
+  level__box.innerHTML = "Level : " + gameLevel;
+  scoreBox.innerHTML = "Score: " + score;
 }
 
-window.requestAnimationFrame(main);
-window.addEventListener("keydown", (e) => {
-  inputDir = { x: 0, y: 1 }; // Start the game
-  moveSound.play();
-  switch (e.key) {
-    case "ArrowUp":
-      console.log("ArrowUp");
-      inputDir.x = 0;
-      inputDir.y = -1;
-      break;
+// Main logic starts here
+musicSound.play();
 
-    case "ArrowDown":
-      console.log("ArrowDown");
-      inputDir.x = 0;
-      inputDir.y = 1;
-      break;
+startGame();
 
-    case "ArrowLeft":
-      console.log("ArrowLeft");
-      inputDir.x = -1;
-      inputDir.y = 0;
-      break;
+function startGame() {
+  popup.style.display = "none";
+  document.getElementById("overlay").style.display = "none";
+  snakeArr = [{ x: 13, y: 15 }];
+  musicSound.play();
+  score = 0;
+  scoreBox.innerHTML = "Score: " + score;
 
-    case "ArrowRight":
-      console.log("ArrowRight");
-      inputDir.x = 1;
-      inputDir.y = 0;
-      break;
-    default:
-      break;
+  let hiscore = localStorage.getItem("hiscore");
+  let level = localStorage.getItem("level");
+
+  if (hiscore === null) {
+    hiscoreval = 0;
+    localStorage.setItem("hiscore", JSON.stringify(hiscoreval));
+  } else {
+    hiscoreval = JSON.parse(hiscore);
+    hiscoreBox.innerHTML = "HiScore: " + hiscore;
   }
-});
+
+  if (level === null) {
+    gameLevel = 1;
+    localStorage.setItem("level", JSON.stringify(gameLevel));
+  } else {
+    gameLevel = JSON.parse(level);
+    level__box.innerHTML = "Level : " + gameLevel;
+  }
+
+  window.requestAnimationFrame(main);
+  window.addEventListener("keydown", (e) => {
+    inputDir = { x: 0, y: 1 }; // Start the game
+    moveSound.play();
+    switch (e.key) {
+      case "ArrowUp":
+        inputDir.x = 0;
+        inputDir.y = -1;
+        break;
+
+      case "ArrowDown":
+        inputDir.x = 0;
+        inputDir.y = 1;
+        break;
+
+      case "ArrowLeft":
+        inputDir.x = -1;
+        inputDir.y = 0;
+        break;
+
+      case "ArrowRight":
+        inputDir.x = 1;
+        inputDir.y = 0;
+        break;
+      default:
+        break;
+    }
+  });
+}
+
+// Add an event listener to the button
+const resetButton = document.getElementById("button");
+resetButton.addEventListener("click", resetScoresAndLevel);
+
+const restartButton = document.getElementById("restartbutton");
+restartButton.addEventListener("click", startGame);
