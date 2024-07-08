@@ -4,15 +4,20 @@ const foodSound = new Audio("music/food.mp3");
 const gameOverSound = new Audio("music/gameover.mp3");
 const moveSound = new Audio("music/move.mp3");
 const musicSound = new Audio("music/music.mp3");
+
 let speed = 4;
+let hiscoreval = 0;
 let score = 0;
 let lastPaintTime = 0;
 let snakeArr = [{ x: 13, y: 15 }];
+
+console.log("start");
 
 food = { x: 5, y: 5 };
 
 // Game Functions
 function main(ctime) {
+  console.log("main staer");
   window.requestAnimationFrame(main);
   if ((ctime - lastPaintTime) / 1000 < 1 / speed) {
     return;
@@ -42,6 +47,7 @@ function isCollide(snake) {
 }
 
 function popupDesign() {
+  console.log("popupDesign start");
   const scoreDisplay = document.getElementById("scoreDisplay");
   const levelDisplay = document.getElementById("levelDisplay");
   const speedDisplay = document.getElementById("speedDisplay");
@@ -72,10 +78,12 @@ function showGameOverPopup() {
 }
 
 function gameEngine() {
+  console.log("gameEngine start");
   // Part 1: Updating the snake array & Food
   if (isCollide(snakeArr)) {
     gameOverSound.play();
     musicSound.pause();
+    gameOverSound.pause();
     inputDir = { x: 0, y: 0 };
     showGameOverPopup();
     return;
@@ -86,34 +94,14 @@ function gameEngine() {
     foodSound.play();
     score += 1;
 
-    if (score >= 1 && score <= 11) {
+    if (score >= 1 && score <= 3) {
       gameLevel = 1;
       speed = 4;
       localStorage.setItem("level", JSON.stringify(gameLevel));
       level__box.innerHTML = "Level : " + gameLevel;
-    } else if (score >= 12 && score <= 34) {
+    } else if (score >= 4 && score <= 8) {
       gameLevel = 2;
       speed = 5;
-      localStorage.setItem("level", JSON.stringify(gameLevel));
-      level__box.innerHTML = "Level : " + gameLevel;
-    } else if (score >= 35 && score <= 68) {
-      gameLevel = 3;
-      speed = 6;
-      localStorage.setItem("level", JSON.stringify(gameLevel));
-      level__box.innerHTML = "Level : " + gameLevel;
-    } else if (score >= 69 && score <= 113) {
-      gameLevel = 4;
-      speed = 7;
-      localStorage.setItem("level", JSON.stringify(gameLevel));
-      level__box.innerHTML = "Level : " + gameLevel;
-    } else if (score >= 114 && score <= 158) {
-      gameLevel = 5;
-      speed = 7;
-      localStorage.setItem("level", JSON.stringify(gameLevel));
-      level__box.innerHTML = "Level : " + gameLevel;
-    } else if (score >= 159 && score <= 225) {
-      gameLevel = 5;
-      speed = 8;
       localStorage.setItem("level", JSON.stringify(gameLevel));
       level__box.innerHTML = "Level : " + gameLevel;
     }
@@ -170,6 +158,7 @@ function gameEngine() {
 
 // Function to reset scores and level
 function resetScoresAndLevel() {
+  console.log("resetScoresAndLevel");
   speed = 4;
   gameLevel = 1;
   hiscoreval = 0;
@@ -185,18 +174,18 @@ function resetScoresAndLevel() {
 // Main logic starts here
 musicSound.play();
 
+let hiscore = localStorage.getItem("hiscore");
+let level = localStorage.getItem("level");
 startGame();
 
 function startGame() {
+  console.log("startGame");
   popup.style.display = "none";
   document.getElementById("overlay").style.display = "none";
   snakeArr = [{ x: 13, y: 15 }];
   musicSound.play();
   score = 0;
   scoreBox.innerHTML = "Score: " + score;
-
-  let hiscore = localStorage.getItem("hiscore");
-  let level = localStorage.getItem("level");
 
   if (hiscore === null) {
     hiscoreval = 0;
